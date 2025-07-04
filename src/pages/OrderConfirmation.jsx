@@ -19,7 +19,7 @@ export default function OrderConfirmation() {
     return null;
   }
 
-  const { orderNumber, items, subtotal, tax, total, deliveryOption, address, notes, createdAt } = latestOrder;
+  const { orderNumber, items, subtotal, tax, total, serviceType, address, notes, orderTime, phone } = latestOrder;
   
   const formatDate = (dateString) => {
     const options = { 
@@ -45,13 +45,20 @@ export default function OrderConfirmation() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Pesanan Diterima!</h1>
           <p className="text-gray-600">Terima kasih telah memesan di Warkop Khaa</p>
           <p className="text-amber-700 font-medium mt-2">No. Pesanan: {orderNumber}</p>
+          <div className="mt-2 inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
+            {serviceType === 'delivery' 
+              ? '🛵 Delivery' 
+              : serviceType === 'takeaway' 
+                ? '🥡 Take Away' 
+                : '🍽️ Makan di Tempat'}
+          </div>
         </div>
 
         <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
           <div className="px-4 py-5 sm:px-6 bg-gray-50">
             <h3 className="text-lg leading-6 font-medium text-gray-900">Detail Pesanan</h3>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              {formatDate(createdAt)}
+              {formatDate(orderTime || new Date().toISOString())}
             </p>
           </div>
           <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
@@ -76,17 +83,30 @@ export default function OrderConfirmation() {
               </div>
               <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500 flex items-center">
-                  {deliveryOption === 'diantar' ? 
-                    <FaMapMarkerAlt className="mr-2" /> : 
+                  {serviceType === 'delivery' ? (
+                    <FaMapMarkerAlt className="mr-2" />
+                  ) : serviceType === 'takeaway' ? (
                     <FaStore className="mr-2" />
-                  }
-                  {deliveryOption === 'diantar' ? 'Alamat Pengiriman' : 'Ambil di Tempat'}
+                  ) : (
+                    <FaStore className="mr-2" />
+                  )}
+                  {serviceType === 'delivery' 
+                    ? 'Alamat Pengiriman' 
+                    : serviceType === 'takeaway' 
+                      ? 'Ambil Sendiri' 
+                      : 'Makan di Tempat'}
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {deliveryOption === 'diantar' ? 
-                    address : 
+                  {serviceType === 'delivery' ? (
+                    <div>
+                      <p>{address}</p>
+                      {phone && <p className="mt-1">Telp: {phone}</p>}
+                    </div>
+                  ) : serviceType === 'dine-in' ? (
+                    `Meja: ${latestOrder.tableNumber || '-'}`
+                  ) : (
                     'Jl. Contoh No. 123, Kota Bandung (Warkop Khaa)'
-                  }
+                  )}
                 </dd>
               </div>
               {notes && (
@@ -135,14 +155,19 @@ export default function OrderConfirmation() {
             <div className="ml-3">
               <h3 className="text-lg font-medium text-gray-900">Status Pesanan</h3>
               <div className="mt-2 text-sm text-gray-600">
-                <p>Pesanan Anda sedang diproses. {deliveryOption === 'diantar' ? 
-                  'Kurir kami akan segera menuju ke lokasi Anda.' : 
-                  'Silakan datang ke lokasi untuk mengambil pesanan Anda.'}
+                <p>
+                  {serviceType === 'delivery' 
+                    ? 'Pesanan Anda sedang diproses. Kurir kami akan segera menuju ke lokasi Anda.'
+                    : serviceType === 'takeaway'
+                      ? 'Pesanan Anda sedang dipersiapkan. Silakan datang ke lokasi untuk mengambil pesanan.'
+                      : 'Pesanan Anda sedang diproses. Silakan menunggu di meja Anda.'}
                 </p>
                 <p className="mt-2 text-amber-700 font-medium">
-                  {deliveryOption === 'diantar' ? 
-                    'Estimasi pengiriman: 30-45 menit' :
-                    'Pesanan akan siap dalam 15-20 menit'}
+                  {serviceType === 'delivery' 
+                    ? 'Estimasi pengiriman: 30-45 menit'
+                    : serviceType === 'takeaway'
+                      ? 'Pesanan akan siap dalam 15-20 menit'
+                      : 'Pesanan akan diantar ke meja Anda dalam 15-20 menit'}
                 </p>
               </div>
             </div>

@@ -5,6 +5,22 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import toast, { Toaster } from 'react-hot-toast';
 
+// Image paths (using public folder)
+const kopiImage = '/images/kopi.png';
+const nasgorImage = '/images/nasgor.png';
+const mieImage = '/images/mie.png';
+const esKopiImage = '/images/Es Kopi Susu Gula Aren.png';
+const esJerukImage = '/images/Es Jeruk.png';
+const tehTarikImage = '/images/Teh Tarik.png';
+const cappuccinoImage = '/images/Cappuccino.png';
+const nasiAyamImage = '/images/Nasi Ayam Penyet.png';
+const gadoGadoImage = '/images/Gado-gado.png';
+const rotiBakarImage = '/images/Roti Bakar.png';
+const pisangGorengImage = '/images/Pisang Goreng.png';
+const kentangGorengImage = '/images/Kentang Goreng.png';
+const martabakImage = '/images/Martabak Manis.png';
+const jusAlpukatImage = '/images/Jus Alpukat.png';
+
 const menuItems = [
   {
     id: 1,
@@ -12,7 +28,7 @@ const menuItems = [
     price: 12000,
     category: 'minuman',
     description: 'Racikan kopi tradisional dengan gula aren asli',
-    image: '/images/kopi.png',
+    image: kopiImage,
     isFeatured: true
   },
   {
@@ -21,7 +37,7 @@ const menuItems = [
     price: 25000,
     category: 'makanan',
     description: 'Nasi goreng spesial dengan bumbu rempah pilihan',
-    image: '/images/nasgor.png',
+    image: nasgorImage,
     isFeatured: true
   },
   {
@@ -30,7 +46,7 @@ const menuItems = [
     price: 25000,
     category: 'makanan',
     description: 'Mie goreng dengan bumbu khas yang menggugah selera',
-    image: '/images/mie.png',
+    image: mieImage,
     isFeatured: true
   },
   {
@@ -39,7 +55,7 @@ const menuItems = [
     price: 18000,
     category: 'minuman',
     description: 'Paduan kopi, susu, dan gula aren yang menyegarkan',
-    image: '/images/Es Kopi Susu Gula Aren.png'
+    image: esKopiImage
   },
   {
     id: 5,
@@ -47,7 +63,7 @@ const menuItems = [
     price: 12000,
     category: 'minuman',
     description: 'Es jeruk segar dengan sensasi manis asam',
-    image: '/images/Es Jeruk.png'
+    image: esJerukImage
   },
   {
     id: 6,
@@ -55,7 +71,7 @@ const menuItems = [
     price: 10000,
     category: 'minuman',
     description: 'Teh susu khas dengan buih yang lembut',
-    image: '/images/Teh Tarik.png'
+    image: tehTarikImage
   },
   {
     id: 7,
@@ -63,7 +79,7 @@ const menuItems = [
     price: 25000,
     category: 'makanan',
     description: 'Nasi dengan ayam goreng penyet sambal terasi',
-    image: '/images/Nasi Ayam Penyet.png'
+    image: nasiAyamImage
   },
   {
     id: 8,
@@ -71,7 +87,7 @@ const menuItems = [
     price: 20000,
     category: 'makanan',
     description: 'Sayuran segar dengan bumbu kacang khas',
-    image: '/images/Gado-gado.png'
+    image: gadoGadoImage
   },
   {
     id: 9,
@@ -79,7 +95,7 @@ const menuItems = [
     price: 12000,
     category: 'snack',
     description: 'Pisang goreng krispi dengan taburan keju',
-    image: '/images/Pisang Goreng.png'
+    image: pisangGorengImage
   },
   {
     id: 10,
@@ -87,7 +103,7 @@ const menuItems = [
     price: 20000,
     category: 'minuman',
     description: 'Kopi espresso dengan buih susu lembut dan taburan bubuk coklat',
-    image: '/images/Cappuccino.png'
+    image: cappuccinoImage
   },
   {
     id: 11,
@@ -95,7 +111,7 @@ const menuItems = [
     price: 18000,
     category: 'minuman',
     description: 'Jus alpukat segar dengan susu kental manis',
-    image: '/images/Jus Alpukat.png'
+    image: jusAlpukatImage
   },
   {
     id: 12,
@@ -103,7 +119,7 @@ const menuItems = [
     price: 15000,
     category: 'snack',
     description: 'Kentang goreng renyah dengan bumbu spesial',
-    image: '/images/Kentang Goreng.png'
+    image: kentangGorengImage
   },
   {
     id: 13,
@@ -111,7 +127,7 @@ const menuItems = [
     price: 25000,
     category: 'snack',
     description: 'Martabak manis dengan berbagai topping pilihan',
-    image: '/images/Martabak Manis.png'
+    image: martabakImage
   },
   {
     id: 14,
@@ -119,7 +135,7 @@ const menuItems = [
     price: 15000,
     category: 'snack',
     description: 'Roti bakar dengan olesan mentega dan berbagai topping',
-    image: '/images/Roti Bakar.png'
+    image: rotiBakarImage
   }
 ];
 

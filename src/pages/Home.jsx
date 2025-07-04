@@ -32,11 +32,17 @@ const useOnScreen = (ref, rootMargin = '0px') => {
   return isIntersecting;
 };
 
+// Image paths (using public folder)
+const coffeeBg = '/images/coffee-bg.png';
+const kopiImage = '/images/kopi.png';
+const nasgorImage = '/images/nasgor.png';
+const mieImage = '/images/mie.png';
+
 // Background images
 const backgrounds = [
   { 
     id: 1, 
-    src: '/images/coffee-bg.png',
+    src: coffeeBg,
     overlay: 'bg-gradient-to-br from-amber-900/80 to-amber-800/80',
     textColor: 'text-amber-50',
     highlightColor: 'text-amber-200',
@@ -45,7 +51,7 @@ const backgrounds = [
   },
   { 
     id: 2, 
-    src: '/images/kopi.png',
+    src: kopiImage,
     overlay: 'bg-gradient-to-br from-amber-800/80 to-amber-700/80',
     textColor: 'text-amber-50',
     highlightColor: 'text-amber-200',

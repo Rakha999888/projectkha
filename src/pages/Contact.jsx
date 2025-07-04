@@ -17,7 +17,14 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-amber-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
+        <div 
+          className="text-center mb-12"
+          data-animation="fade-in"
+          style={{
+            animation: 'fadeIn 2s ease-out forwards',
+            opacity: 0
+          }}
+        >
           <h1 className="text-4xl font-bold text-amber-900 mb-4">Hubungi Kami</h1>
           <p className="text-lg text-amber-800 max-w-3xl mx-auto">
             Kami siap melayani Anda dengan sepenuh hati. Jangan ragu untuk menghubungi kami melalui berbagai cara di bawah ini.
@@ -38,6 +45,24 @@ const Contact = () => {
               <h2 className="text-2xl font-semibold text-amber-800 mb-6">Informasi Kontak</h2>
               
               <div className="space-y-6">
+                {/* Barcode and Owner Info */}
+                <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                  <div className="flex flex-col md:flex-row items-center">
+                    <div className="mb-4 md:mb-0 md:mr-6">
+                      <img 
+                        src="/images/barcode.jpeg" 
+                        alt="Barcode Pembayaran" 
+                        className="h-40 w-auto border border-gray-200 rounded"
+                      />
+                    </div>
+                    <div className="text-center md:text-left">
+                      <h3 className="text-lg font-semibold text-amber-900">Dukungan Makanan & Minuman</h3>
+                      <p className="text-amber-800 mt-1">a.n. Muhammad Rakha Akbar</p>
+                      <p className="text-sm text-gray-600 mt-2">Pemilik WarkopKhaa</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex items-start">
                   <div className="flex-shrink-0 bg-amber-100 p-3 rounded-full">
                     <FaMapMarkerAlt className="h-6 w-6 text-amber-600" />

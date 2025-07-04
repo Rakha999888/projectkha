@@ -15,10 +15,12 @@ const Cart = () => {
     total
   } = useCart();
 
+  const [serviceType, setServiceType] = useState('dine-in'); // 'dine-in', 'takeaway', 'delivery'
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     tableNumber: '',
     address: '',
+    phone: '',
     notes: ''
   });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -34,8 +36,25 @@ const Cart = () => {
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-    if (!customerInfo.name || !customerInfo.tableNumber) {
-      alert('Mohon isi nama dan nomor meja terlebih dahulu');
+    
+    // Validasi berdasarkan jenis layanan
+    if (!customerInfo.name) {
+      alert('Mohon isi nama Anda terlebih dahulu');
+      return;
+    }
+    
+    if (serviceType === 'dine-in' && !customerInfo.tableNumber) {
+      alert('Mohon isi nomor meja terlebih dahulu');
+      return;
+    }
+    
+    if (serviceType === 'delivery' && !customerInfo.address) {
+      alert('Mohon isi alamat pengiriman terlebih dahulu');
+      return;
+    }
+    
+    if (serviceType === 'delivery' && !customerInfo.phone) {
+      alert('Mohon isi nomor telepon terlebih dahulu');
       return;
     }
 
@@ -52,7 +71,10 @@ const Cart = () => {
       const order = {
         orderNumber: newOrderNumber,
         customerName: customerInfo.name,
-        tableNumber: customerInfo.tableNumber,
+        serviceType,
+        tableNumber: serviceType === 'dine-in' ? customerInfo.tableNumber : null,
+        address: serviceType === 'delivery' ? customerInfo.address : null,
+        phone: customerInfo.phone || null,
         items: cart,
         subtotal,
         tax,
@@ -74,7 +96,16 @@ const Cart = () => {
         state: { 
           orderNumber: newOrderNumber,
           customerName: customerInfo.name,
-          tableNumber: customerInfo.tableNumber
+          serviceType,
+          tableNumber: customerInfo.tableNumber,
+          address: customerInfo.address,
+          phone: customerInfo.phone,
+          notes: customerInfo.notes,
+          items: cart,
+          subtotal,
+          tax,
+          total,
+          orderTime: new Date().toISOString()
         } 
       });
 
@@ -195,7 +226,43 @@ const Cart = () => {
               <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-6">Ringkasan Pesanan</h2>
                 
-                <div className="space-y-4 mb-6">
+                <form onSubmit={handleCheckout} className="space-y-4 mb-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Jenis Layanan</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setServiceType('dine-in')}
+                        className={`p-2 text-sm rounded-lg border-2 ${serviceType === 'dine-in' ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-gray-200 hover:border-amber-300'}`}
+                      >
+                        <div className="text-center">
+                          <div className="text-lg">🍽️</div>
+                          <div>Makan di Tempat</div>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setServiceType('takeaway')}
+                        className={`p-2 text-sm rounded-lg border-2 ${serviceType === 'takeaway' ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-gray-200 hover:border-amber-300'}`}
+                      >
+                        <div className="text-center">
+                          <div className="text-lg">🥡</div>
+                          <div>Take Away</div>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setServiceType('delivery')}
+                        className={`p-2 text-sm rounded-lg border-2 ${serviceType === 'delivery' ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-gray-200 hover:border-amber-300'}`}
+                      >
+                        <div className="text-center">
+                          <div className="text-lg">🛵</div>
+                          <div>Delivery</div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal ({cartItemCount} item{cartItemCount > 1 ? 's' : ''})</span>
                     <span className="font-medium">Rp {subtotal.toLocaleString('id-ID')}</span>
@@ -208,9 +275,7 @@ const Cart = () => {
                     <span className="text-lg font-bold text-gray-900">Total</span>
                     <span className="text-lg font-bold text-amber-600">Rp {total.toLocaleString('id-ID')}</span>
                   </div>
-                </div>
-                
-                <form onSubmit={handleCheckout} className="space-y-4">
+                  
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                       Nama Pemesan <span className="text-red-500">*</span>
@@ -222,44 +287,64 @@ const Cart = () => {
                       value={customerInfo.name}
                       onChange={handleInputChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                      placeholder="contoh: Budi Santoso"
+                      placeholder="Nama lengkap Anda"
                       required
                     />
                   </div>
-                  
-                  <div>
-                    <label htmlFor="tableNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                      No. WA <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      id="tableNumber"
-                      name="tableNumber"
-                      value={customerInfo.tableNumber}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                      placeholder="contoh: 6281234567890"
-                      pattern="[0-9]*"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                      Alamat <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="address"
-                      name="address"
-                      value={customerInfo.address}
-                      onChange={handleInputChange}
-                      rows="2"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                      placeholder="contoh: jl. contoh no. 123, kec. contoh, kota contoh"
-                      required
-                    ></textarea>
-                  </div>
-                  
+
+                  {serviceType === 'dine-in' && (
+                    <div>
+                      <label htmlFor="tableNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                        Nomor Meja <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="tableNumber"
+                        name="tableNumber"
+                        value={customerInfo.tableNumber}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        placeholder="Contoh: A1, B2, dll"
+                        required
+                      />
+                    </div>
+                  )}
+
+                  {serviceType === 'delivery' && (
+                    <>
+                      <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                          Alamat Pengiriman <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          id="address"
+                          name="address"
+                          value={customerInfo.address}
+                          onChange={handleInputChange}
+                          rows="3"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                          placeholder="Alamat lengkap pengiriman"
+                          required
+                        ></textarea>
+                      </div>
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                          Nomor Telepon <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={customerInfo.phone}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                          placeholder="Contoh: 081234567890"
+                          required
+                        />
+                      </div>
+                    </>
+                  )}
+
                   <div>
                     <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
                       Catatan (Opsional)
@@ -269,9 +354,9 @@ const Cart = () => {
                       name="notes"
                       value={customerInfo.notes}
                       onChange={handleInputChange}
-                      rows="3"
+                      rows="2"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                      placeholder="contoh: tidak pakai gula, pedas level 5, dll."
+                      placeholder={serviceType === 'delivery' ? 'Contoh: Jangan berdering, taruh di depan pintu' : 'Contoh: Pedas, Tanpa Bawang, dll'}
                     ></textarea>
                   </div>
                   
